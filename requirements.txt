@@ -1,0 +1,7 @@
+aiohttp==3.8.4
+langchain[llms]==0.0.202
+streamlit==1.23.1
+tqdm==4.65.0
+openai
+chromadb
+tiktoken

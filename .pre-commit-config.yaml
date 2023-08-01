@@ -1,0 +1,30 @@
+# general formatting
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.5.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+    -   id: requirements-txt-fixer
+    -   id: check-added-large-files
+    -   id: check-toml
+# jupytext
+-   repo: https://github.com/mwouts/jupytext
+    rev: v1.11.0  # CURRENT_TAG/COMMIT_HASH
+    hooks:
+    - id: jupytext
+      args: [--from, ipynb, --to, "py:percent",--sync, --pipe, black]
+      additional_dependencies:
+        - black==20.8b1 # Matches hook
+# Black (code formatting)
+-   repo: https://github.com/psf/black
+    rev: 21.6b0 # Replace by any tag/version: https://github.com/psf/black/tags
+    hooks:
+      - id: black
+        language_version: python3
+# Isort (import sorting)
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.7.0
+    hooks:
+      - id: isort
