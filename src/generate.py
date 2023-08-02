@@ -1,15 +1,12 @@
 import os
-import sys
 
 import streamlit as st
 from langchain.chains.qa_with_sources import load_qa_with_sources_chain
 from langchain.chat_models import ChatOpenAI
-
-from app_process.context import QUESTION_PROMPT, COMBINE_PROMPT
-
-sys.path.append('../search_data')
-
+import sys
+sys.path.append('../search_data/')
 from config import model_name
+from context import QUESTION_PROMPT, COMBINE_PROMPT
 
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 

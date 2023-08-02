@@ -5,3 +5,4 @@ tqdm==4.65.0
 openai
 chromadb
 tiktoken
+google-cloud-storage

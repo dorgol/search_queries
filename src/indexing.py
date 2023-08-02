@@ -11,7 +11,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from tqdm import tqdm
 from config import chunk_size, chunk_overlap
-from indexing_process.get_queries import get_saved_queries_list
+from get_queries import get_saved_queries_list
 
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 os.environ["PROJECT_ID"] = 'ltx-dwh-playground'
