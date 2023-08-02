@@ -1,13 +1,7 @@
 import os
-import sys
-import streamlit as st
-from generate import get_relevant, summary_query
-from indexing import load_db
 import subprocess
 
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
-os.environ["OPENAI_ORGANIZATION"] = st.secrets["OPENAI_ORGANIZATION"]
-
+import streamlit as st
 
 def auth_gcs():
     command_auth = ['gcloud', 'auth', 'login']
@@ -19,6 +13,15 @@ def auth_gcs():
 
 
 auth_gcs()
+
+from generate import get_relevant, summary_query
+from indexing import load_db
+
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+os.environ["OPENAI_ORGANIZATION"] = st.secrets["OPENAI_ORGANIZATION"]
+
+
+
 
 
 def main():
