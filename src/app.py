@@ -22,8 +22,6 @@ auth_gcs()
 
 
 def main():
-
-
     user_input = st.text_input("I'm looking for data about",
                                "number of installations per period in Facetune android")
     vectordb = load_db(remote=True)

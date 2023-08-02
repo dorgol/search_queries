@@ -89,16 +89,17 @@ def indexing(documents):
 
 
 def load_db(remote=False):
+    path_to_db = 'db'
+    if not os.path.exists(path_to_db):
+        os.makedirs(path_to_db)
     if remote:
-        path_to_db = 'db'
         command = [
             'gsutil', '-m', 'cp',
-            '-r', f'gs://{os.environ["BUCKET_NAME"]}/db/', path_to_db
+            '-r', f'gs://{os.environ["BUCKET_NAME"]}/db/*', path_to_db
         ]
         subprocess.run(command, check=True)
-    persist_directory = 'db'
     embedding = get_embedding_function()
-    vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
+    vectordb = Chroma(persist_directory=path_to_db, embedding_function=embedding)
 
     return vectordb
 
