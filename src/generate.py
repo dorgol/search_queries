@@ -4,7 +4,7 @@ import streamlit as st
 from langchain.chains.qa_with_sources import load_qa_with_sources_chain
 from langchain.chat_models import ChatOpenAI
 import sys
-sys.path.append('../search_data/')
+sys.path.append('../search_queries/')
 from config import model_name
 from context import QUESTION_PROMPT, COMBINE_PROMPT
 
