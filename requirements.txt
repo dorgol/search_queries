@@ -1,5 +1,5 @@
+chromadb
 aiohttp==3.8.4
-chroma
 langchain==0.0.237
 streamlit==1.23.1
 tqdm==4.65.0
