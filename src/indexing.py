@@ -4,6 +4,7 @@ from typing import List
 
 import chromadb
 import streamlit as st
+from google.cloud import storage
 from langchain.docstore.document import Document
 from langchain.document_loaders import DirectoryLoader
 from langchain.document_loaders import TextLoader
@@ -11,6 +12,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from tqdm import tqdm
+
 from config import chunk_size, chunk_overlap
 from get_queries import get_saved_queries_list
 
@@ -89,16 +91,32 @@ def indexing(documents):
     vectordb.persist()
 
 
+def download_directory(bucket_name, source_blob_prefix, destination_directory):
+    toml_data = st.secrets["gcp_service_account"]
+
+    # Use the service account dictionary to create the storage client
+    storage_client = storage.Client.from_service_account_info(toml_data)
+
+    bucket = storage_client.bucket(bucket_name)
+    blobs = bucket.list_blobs(prefix=source_blob_prefix)
+
+    for blob in blobs:
+        # Extract the file path from the blob name
+        file_path = blob.name.replace(source_blob_prefix, '', 1).lstrip('/')
+        local_path = f"{destination_directory}/{file_path}"
+        # Create local directories if they don't exist
+        local_dir = "/".join(local_path.split("/")[:-1])
+        if not os.path.exists(local_dir):
+            os.makedirs(local_dir)
+        # Download the blob to the specified path
+        blob.download_to_filename(local_path)
+
+
 def load_db(remote=False):
     path_to_db = 'db'
-    if not os.path.exists(path_to_db):
-        os.makedirs(path_to_db)
+
     if remote:
-        command = [
-            'gsutil', '-m', 'cp',
-            '-r', f'gs://{os.environ["BUCKET_NAME"]}/db/*', path_to_db
-        ]
-        subprocess.run(command, check=True)
+        download_directory('ltx_queries', path_to_db, path_to_db)
     embedding = get_embedding_function()
     client = chromadb.PersistentClient(path='./db')
     vectordb = Chroma(persist_directory=path_to_db, embedding_function=embedding, client=client)
