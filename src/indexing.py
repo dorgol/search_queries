@@ -2,6 +2,7 @@ import os
 import subprocess
 from typing import List
 
+import chromadb
 import streamlit as st
 from langchain.docstore.document import Document
 from langchain.document_loaders import DirectoryLoader
@@ -99,7 +100,8 @@ def load_db(remote=False):
         ]
         subprocess.run(command, check=True)
     embedding = get_embedding_function()
-    vectordb = Chroma(persist_directory=path_to_db, embedding_function=embedding)
+    client = chromadb.PersistentClient(path='./db')
+    vectordb = Chroma(persist_directory=path_to_db, embedding_function=embedding, client=client)
 
     return vectordb
 
@@ -120,7 +122,6 @@ def empty_folder(folder_path):
             if os.path.isfile(file_path):
                 os.remove(file_path)
             elif os.path.isdir(file_path):
-                # If the file is a directory, use a recursive call to empty it
                 empty_folder(file_path)
         except Exception as e:
             print(f"Error while deleting {file_path}: {e}")

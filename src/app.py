@@ -1,18 +1,6 @@
 import os
-import subprocess
 
 import streamlit as st
-
-def auth_gcs():
-    command_auth = ['gcloud', 'auth', 'login']
-    command_project = ['gcloud', 'config', 'set', 'project', os.environ["PROJECT_ID"]]
-
-    # Authenticate and set project
-    subprocess.run(command_auth, check=True)
-    subprocess.run(command_project, check=True)
-
-
-auth_gcs()
 
 from generate import get_relevant, summary_query
 from indexing import load_db
@@ -21,13 +9,10 @@ os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 os.environ["OPENAI_ORGANIZATION"] = st.secrets["OPENAI_ORGANIZATION"]
 
 
-
-
-
 def main():
     user_input = st.text_input("I'm looking for data about",
                                "number of installations per period in Facetune android")
-    vectordb = load_db(remote=True)
+    vectordb = load_db(remote=False)
     retriever, docs = get_relevant(vectordb, user_input)
     response = summary_query(docs, user_input)
     st.write(response['output_text'])

@@ -1,14 +1,14 @@
 from langchain.prompts import PromptTemplate
 
 
-question_prompt_template = """Use the following portion of a long document to see if any of the text is relevant to 
-answer the question. 
-Your goal is to find the query number in Redash, not finding the database and datasets in BigQuery.
-You are an expert in SQL. You are also an expert in analyzing data - you understand the metrics really well.
-Explain what this query is doing in details.
+question_prompt_template = """You are an expert in SQL and proficient in data analysis, with a deep understanding of 
+various metrics. Your expertise enables you to comprehend and interpret SQL queries effectively. Given a specific SQL 
+query, your task is to explain the intended goal of the analyst who wrote the query. Your explanation should be 
+concise, up to 100 words, and clearly describe the purpose behind the query. If the query appears irrelevant to the 
+question, please state so.
 
 {context}
-Question: Where can I find data about {question}
+Question: What is this query doing? {question}
 """
 
 QUESTION_PROMPT = PromptTemplate(
@@ -17,17 +17,33 @@ QUESTION_PROMPT = PromptTemplate(
 
 
 combine_prompt_template = """
-You are an expert in SQL.
-Your goal is to find the query number in Redash, not finding the database and datasets in BigQuery.
-Given the following extracted parts of a long document and a question, create a final 
-answer with references ("SOURCES"). 
-If you don't know the answer, just say that you don't know. Don't try to make up an answer.
-ALWAYS return a "SOURCES" part in your answer.
-if you answer with a query number put it in the following format: "https://redash.lightricks.com/queries/ID".
-The ID can be found at the beginning of every query
-if you don't have a direct answer, but you have close answer say it and stress out that's it wasn't the exact answer.
-Explain why did you choose this query.
-If you see several relevant queries say it to the user.
+Prompt Title: Finding Relevant SQL Queries in Redash
+
+Introduction:
+You are an expert in SQL, and your goal is to find the query number in Redash. Your task involves not finding the database and datasets in BigQuery. In the following task, you will be presented with extracted parts of a long document and a specific question. Your final answer should be accompanied by references ("SOURCES") to support your response.
+
+Task:
+Given the following extracted parts of a long document and the question provided, create a final answer with proper references ("SOURCES"). Always ensure you provide accurate and valid information, and refrain from making up answers. If you are unsure of the answer, kindly state that you don't know. Your response should include a "SOURCES" section with relevant links or citations to back up your answers.
+
+Format for Query Number:
+If you can provide a specific query number, use the following format:
+"https://redash.lightricks.com/queries/ID".
+The ID can be found at the beginning of every query.
+
+Partial Answers and Close Matches:
+If you don't have a direct answer but have a close answer, make sure to mention it and highlight that it's not the exact answer.
+
+Multiple Relevant Queries:
+If you find several relevant queries, indicate it to the user.
+
+Top 5 Queries:
+Additionally, return the top 5 queries in the following format:
+
+1. Query (query_num) - link to the query / short explanation of why you think this query is relevant.
+2. ...
+3. ...
+4. ...
+5. ...
 
 
 QUESTION: Where can I find data about {question}

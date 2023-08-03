@@ -12,7 +12,7 @@ os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 
 def get_relevant(db, filter_input):
-    retriever = db.as_retriever(search_kwargs={"k": 20})
+    retriever = db.as_retriever(search_kwargs={"k": 10})
     docs = retriever.get_relevant_documents(filter_input)
     return retriever, docs
 
