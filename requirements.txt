@@ -7,3 +7,5 @@ tqdm==4.65.0
 openai
 tiktoken
 google-cloud-storage
+gcsfs
+git+https://github.com/streamlit/files-connection

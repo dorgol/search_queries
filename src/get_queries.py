@@ -16,7 +16,10 @@ from filter_terms import list_of_emails, list_of_filter_words
 
 
 def get_client():
-    storage_client = storage.Client(project='ltx-dwh-playground')
+    toml_data = st.secrets["gcp_service_account"]
+
+    # Use the service account dictionary to create the storage client
+    storage_client = storage.Client.from_service_account_info(toml_data)
     bucket_name = "ltx_queries"
     bucket = storage_client.get_bucket(bucket_name)
     return bucket
