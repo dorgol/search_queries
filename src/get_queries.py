@@ -25,7 +25,7 @@ def get_client():
     return bucket
 
 
-gcs_bucket = get_client()
+
 
 
 async def fetch_queries(api_key, query_ids):
@@ -145,6 +145,7 @@ def filter_by_name(responses, exclusions):
 
 
 def get_saved_queries_list():
+    gcs_bucket = get_client()
     blobs = list(gcs_bucket.list_blobs())
 
     pattern = re.compile(r'\d+')
@@ -197,7 +198,7 @@ def save_queries(queries, update=True):
                 user_email=query_data["user_email"],
                 query=query_data["query"],
             )
-
+            gcs_bucket = get_client()
             blob = gcs_bucket.blob(filename)
             blob.upload_from_string(content)
 
