@@ -1,5 +1,4 @@
 chromadb
-pysqlite3-binary
 aiohttp==3.8.4
 langchain==0.0.237
 streamlit==1.23.1
